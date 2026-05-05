@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-05-05T19:18:00.000Z" agent="5.0" etag="hij456" version="21.1.2" type="device">
+  <diagram name="Integration Flows" id="integration-flows">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="2" value="AI Health Care Ecosystem - Integration Flows" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Core Systems (Center) -->
+        <mxCell id="3" value="Hospital Management&#xa;System" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="200" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="4" value="Telemedicine&#xa;Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Supporting Systems (Around) -->
+        <mxCell id="5" value="Pharmacy&#xa;Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="6" value="Laboratory&#xa;Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="200" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="7" value="Health Insurance&#xa;Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="200" y="440" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="8" value="Appointment &amp;&#xa;Scheduling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="760" y="200" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="9" value="Remote Patient&#xa;Monitoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="760" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="10" value="Medical Analytics&#xa;&amp; AI Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="760" y="440" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Mobile Apps (Top) -->
+        <mxCell id="11" value="Patient Mobile&#xa;Application" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="340" y="80" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="12" value="Doctor Mobile&#xa;Application" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Central Integration Hub -->
+        <mxCell id="13" value="Integration Hub&#xa;(API Gateway &amp; Message Queue)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="440" y="580" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Data Flow Connections -->
+        <!-- Mobile Apps to Core Systems -->
+        <mxCell id="14" edge="1" parent="1" source="11" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="15" edge="1" parent="1" source="11" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="16" edge="1" parent="1" source="12" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="17" edge="1" parent="1" source="12" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Core Systems Integration -->
+        <mxCell id="18" edge="1" parent="1" source="3" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="19" edge="1" parent="1" source="3" target="8" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="20" edge="1" parent="1" source="4" target="8" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Supporting Systems to Core -->
+        <mxCell id="21" edge="1" parent="1" source="5" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="22" edge="1" parent="1" source="5" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="23" edge="1" parent="1" source="6" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="24" edge="1" parent="1" source="6" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="25" edge="1" parent="1" source="7" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="26" edge="1" parent="1" source="7" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Analytics and Monitoring Integration -->
+        <mxCell id="27" edge="1" parent="1" source="9" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="28" edge="1" parent="1" source="9" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="29" edge="1" parent="1" source="10" target="3" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="30" edge="1" parent="1" source="10" target="4" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="31" edge="1" parent="1" source="10" target="5" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="32" edge="1" parent="1" source="10" target="6" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="33" edge="1" parent="1" source="10" target="7" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="34" edge="1" parent="1" source="10" target="9" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- All systems to Integration Hub -->
+        <mxCell id="35" edge="1" parent="1" source="3" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="36" edge="1" parent="1" source="4" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="37" edge="1" parent="1" source="5" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="38" edge="1" parent="1" source="6" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="39" edge="1" parent="1" source="7" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="40" edge="1" parent="1" source="8" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="41" edge="1" parent="1" source="9" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="42" edge="1" parent="1" source="10" target="13" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="43" value="Data Flow Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="700" width="150" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="44" value="Direct Integration" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="45" edge="1" parent="1" source="44" target="44" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#666666;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="750" as="sourcePoint" />
+            <mxPoint x="250" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="46" value="Integration Hub Connection" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="47" edge="1" parent="1" source="46" target="46" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="780" as="sourcePoint" />
+            <mxPoint x="250" y="780" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
