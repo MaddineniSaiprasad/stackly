@@ -1,9 +1,9 @@
-import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, ListItemButton } from '@mui/material';
 import { Dashboard as DashboardIcon, LocalHospital, VideoCall, LocalPharmacy, Science, Security, Event, MonitorHeart, Analytics as AnalyticsIcon, BugReport, Logout } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
-import { RootState } from '../store';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import type { RootState } from '../store';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Telemedicine from './Telemedicine';
 import Monitoring from './Monitoring';
 import Hospital from './Hospital';
@@ -32,6 +32,7 @@ const menuItems = [
 export default function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
 
   return (
@@ -42,7 +43,7 @@ export default function Dashboard() {
             AI Healthcare Portal
           </Typography>
           <Typography sx={{ mr: 2 }}>{user?.email}</Typography>
-          <IconButton color="inherit" onClick={() => dispatch(logout())}>
+          <IconButton color="inherit" onClick={() => dispatch(logout())} aria-label="Logout">
             <Logout />
           </IconButton>
         </Toolbar>
@@ -58,12 +59,36 @@ export default function Dashboard() {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
-            {menuItems.map((item) => (
-              <ListItem button key={item.text} onClick={() => navigate(item.path)}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
+            {menuItems.map((item) => {
+              const isSelected = location.pathname === item.path;
+              return (
+                <ListItem key={item.text} disablePadding>
+                  <ListItemButton
+                    selected={isSelected}
+                    onClick={() => navigate(item.path)}
+                    sx={{
+                      '&.Mui-selected': {
+                        borderRight: '4px solid',
+                        borderColor: 'primary.main',
+                        bgcolor: 'primary.light',
+                        '& .MuiListItemIcon-root': {
+                          color: 'primary.main',
+                        },
+                        '& .MuiListItemText-primary': {
+                          fontWeight: 'bold',
+                          color: 'primary.main',
+                        },
+                      },
+                    }}
+                  >
+                    <ListItemIcon>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
       </Drawer>
