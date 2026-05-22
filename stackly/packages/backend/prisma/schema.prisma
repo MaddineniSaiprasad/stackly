@@ -1,0 +1,172 @@
+// Prisma schema for PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   // PATIENT, DOCTOR, ADMIN, PHARMACIST, LAB_TECH, INSURANCE_AGENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile   Profile?
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  firstName String
+  lastName  String
+  phone     String?
+  address   String?
+  dob       DateTime?
+  gender    String?
+}
+
+// Hospital Management
+model Patient {
+  id           String        @id @default(uuid())
+  userId       String?       @unique
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  dob          DateTime
+  gender       String
+  admissions   Admission[]
+  appointments Appointment[]
+  bills        Bill[]
+}
+
+model Doctor {
+  id             String        @id @default(uuid())
+  userId         String?       @unique
+  firstName      String
+  lastName       String
+  specialization String
+  department     String
+  isAvailable    Boolean       @default(true)
+  appointments   Appointment[]
+  schedules      Schedule[]
+}
+
+model Ward {
+  id     String @id @default(uuid())
+  name   String
+  type   String
+  beds   Bed[]
+}
+
+model Bed {
+  id         String      @id @default(uuid())
+  number     String
+  wardId     String
+  ward       Ward        @relation(fields: [wardId], references: [id])
+  isOccupied Boolean     @default(false)
+  admissions Admission[]
+}
+
+model Admission {
+  id            String    @id @default(uuid())
+  patientId     String
+  patient       Patient   @relation(fields: [patientId], references: [id])
+  bedId         String
+  bed           Bed       @relation(fields: [bedId], references: [id])
+  admissionDate DateTime  @default(now())
+  dischargeDate DateTime?
+  reason        String
+}
+
+model Bill {
+  id        String   @id @default(uuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  amount    Float
+  dueDate   DateTime
+  status    String   // PENDING, PAID, OVERDUE
+  createdAt DateTime @default(now())
+}
+
+// Scheduling
+model Appointment {
+  id        String   @id @default(uuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  dateTime  DateTime
+  status    String   // SCHEDULED, COMPLETED, CANCELLED
+  type      String   // IN_PERSON, TELEMEDICINE
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  dayOfWeek Int      // 0-6
+  startTime String   // "HH:mm"
+  endTime   String   // "HH:mm"
+}
+
+// Pharmacy (Relational parts)
+model Medicine {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  stock       Int
+  expiryDate  DateTime
+  supplierId  String
+  supplier    Supplier    @relation(fields: [supplierId], references: [id])
+}
+
+model Supplier {
+  id        String     @id @default(uuid())
+  name      String
+  contact   String
+  medicines Medicine[]
+}
+
+// Laboratory (Relational parts)
+model LabTest {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+}
+
+// Insurance
+model InsurancePolicy {
+  id          String   @id @default(uuid())
+  name        String
+  type        String
+  coverage    Float
+  premium     Float
+  claims      Claim[]
+}
+
+model Claim {
+  id        String          @id @default(uuid())
+  policyId  String
+  policy    InsurancePolicy @relation(fields: [policyId], references: [id])
+  patientId String
+  amount    Float
+  status    String          // SUBMITTED, APPROVED, REJECTED
+  date      DateTime        @default(now())
+}
+
+// Monitoring
+model IoTDevice {
+  id        String  @id @default(uuid())
+  patientId String
+  type      String  // HEART_RATE, BLOOD_PRESSURE, etc.
+  status    String  @default("ACTIVE")
+}
