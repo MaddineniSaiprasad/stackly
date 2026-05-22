@@ -14,6 +14,7 @@
   "packageManager": "pnpm@10.30.3",
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "@stackly/shared": "workspace:*",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

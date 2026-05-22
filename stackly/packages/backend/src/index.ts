@@ -9,6 +9,8 @@ import authRoutes from './modules/auth';
 import hospitalRoutes from './modules/hospital';
 import supportingRoutes from './modules/supporting';
 import advancedRoutes from './modules/advanced';
+import { connectDB } from './database/mongoose';
+import VitalSigns from './models/VitalSigns';
 
 dotenv.config();
 
@@ -19,6 +21,9 @@ const io = new Server(httpServer, {
     origin: "*",
   }
 });
+
+// Connect to MongoDB
+connectDB();
 
 app.use(helmet());
 app.use(cors());
@@ -45,14 +50,25 @@ io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
   socket.on('subscribe-vitals', (patientId) => {
-    const interval = setInterval(() => {
-      const vitals = {
+    const interval = setInterval(async () => {
+      const vitalsData = {
         patientId,
         heartRate: 60 + Math.floor(Math.random() * 40),
         bloodPressure: `${110 + Math.floor(Math.random() * 20)}/${70 + Math.floor(Math.random() * 15)}`,
+        temperature: 36.5 + (Math.random() * 1.5),
+        oxygenSaturation: 95 + Math.floor(Math.random() * 5),
         timestamp: new Date()
       };
-      socket.emit('vitals-update', vitals);
+
+      // Persist to MongoDB
+      try {
+          const vitals = new VitalSigns(vitalsData);
+          await vitals.save();
+      } catch (err) {
+          console.error('Error persisting vitals:', err);
+      }
+
+      socket.emit('vitals-update', vitalsData);
     }, 2000);
 
     socket.on('disconnect', () => clearInterval(interval));
