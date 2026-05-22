@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+*.log
+stackly/packages/*/dist
+stackly/packages/*/node_modules
+.DS_Store

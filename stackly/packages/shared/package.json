@@ -1,0 +1,19 @@
+{
+  "name": "@stackly/shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.3",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
