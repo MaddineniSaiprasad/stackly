@@ -15,14 +15,50 @@ A comprehensive AI Healthcare web application with 8 integrated modules.
 ## Tech Stack
 - **Frontend**: React, TypeScript, Vite, Material-UI, Redux Toolkit, Socket.io-client, Chart.js, Simple-Peer.
 - **Backend**: Node.js, Express, TypeScript, Prisma (PostgreSQL), Mongoose (MongoDB), Socket.io.
-- **Infrastructure**: Docker Compose (PostgreSQL, MongoDB).
+- **Databases**: Local PostgreSQL and MongoDB (Windows).
+
+## Prerequisites (Windows)
+Install the following using Windows Package Manager (`winget`):
+
+### 1. PostgreSQL
+```powershell
+winget install PostgreSql.PostgreSql.15
+```
+*Note: During installation, set the password for the `postgres` user to `password123` (or update it in `packages/backend/.env`).*
+
+### 2. MongoDB
+```powershell
+winget install MongoDB.Server
+```
 
 ## Setup
-1. Install dependencies: `pnpm install`
-2. Start databases: `docker-compose up -d`
-3. Setup database: `cd packages/backend && npx prisma db push && npx prisma db seed`
-4. Run development servers: `pnpm dev`
+1. **Install dependencies**:
+   ```powershell
+   pnpm install
+   ```
+2. **Configure Environment**:
+   - Navigate to `packages/backend`.
+   - Copy `.env.example` to `.env`.
+   - Ensure your database credentials match.
+
+3. **Initialize PostgreSQL**:
+   ```powershell
+   cd packages/backend
+   npx prisma db push
+   npx prisma db seed
+   ```
+
+4. **Run development servers**:
+   ```powershell
+   pnpm dev
+   ```
 
 ## Default Credentials
 - **Patient**: `patient@example.com` / `password123`
 - **Doctor**: `doctor@example.com` / `password123`
+
+## Docker (Alternative/Production)
+You can still use Docker if preferred:
+```bash
+docker-compose up -d
+```
