@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Grid, CalendarPicker, LocalizationProvider, StaticDatePicker } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { Box, Typography, Paper, Grid, List, ListItem, ListItemText, Button } from '@mui/material';
 import axios from 'axios';
 
 export default function Scheduling() {
@@ -8,7 +7,9 @@ export default function Scheduling() {
   const [doctors, setDoctors] = useState<any[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/hospital/doctors').then(res => setDoctors(res.data));
+    axios.get('http://localhost:5000/api/hospital/doctors')
+      .then(res => setDoctors(res.data))
+      .catch(() => {});
   }, []);
 
   return (
@@ -28,7 +29,7 @@ export default function Scheduling() {
             <Typography variant="h6" gutterBottom>Available Doctors</Typography>
             <List>
               {doctors.map(d => (
-                <ListItem button key={d.id}>
+                <ListItem key={d.id}>
                   <ListItemText primary={`Dr. ${d.firstName} ${d.lastName}`} secondary={d.specialization} />
                   <Button size="small" variant="contained">Book</Button>
                 </ListItem>
@@ -40,5 +41,3 @@ export default function Scheduling() {
     </Box>
   );
 }
-
-import { List, ListItem, ListItemText, Button } from '@mui/material';
