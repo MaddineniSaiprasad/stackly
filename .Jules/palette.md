@@ -1,0 +1,3 @@
+## 2025-05-14 - [MUI Navigation & Accessibility Patterns]
+**Learning:** For navigation lists in Material-UI v5/v6, the preferred pattern is to nest a 'ListItemButton' inside a 'ListItem' with 'disablePadding' to ensure correct styling, interaction states, and accessibility. Visual feedback for the active route should be handled via the 'selected' prop on 'ListItemButton'. Additionally, icon-only buttons must always have both an 'aria-label' for screen readers and a 'Tooltip' for sighted users to ensure the interface is intuitive and accessible.
+**Action:** Use 'ListItemButton' with 'selected' prop for all sidebar navigation and ensure all action-only icons are wrapped in Tooltips with corresponding ARIA labels.
