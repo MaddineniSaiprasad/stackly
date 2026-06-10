@@ -1,0 +1,3 @@
+## 2025-06-10 - Modernizing MUI Sidebar Navigation
+**Learning:** Using `ListItemButton` with the `selected` prop is the correct accessible pattern for navigation in MUI v6+. Additionally, when applying conditional styling (like bolding) to `ListItemText`, wrapping the content in a `Typography` component passed to the `primary` prop is more type-safe than using `primaryTypographyProps` which often encounters assignment errors in strict TypeScript environments.
+**Action:** Always prefer `ListItemButton` for interactive list items and use nested `Typography` for complex conditional styling of labels.
