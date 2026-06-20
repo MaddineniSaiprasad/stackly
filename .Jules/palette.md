@@ -1,0 +1,3 @@
+## 2025-05-15 - Sidebar Active State & Logout Accessibility
+**Learning:** In Material-UI v9, the active route in a sidebar can be effectively highlighted using the `selected` prop on `ListItemButton` combined with primary color styling for both icons and text. This provides a clear visual cue of the user's current location within the app. Adding Tooltips to icon-only buttons in the AppBar significantly improves accessibility and discoverability.
+**Action:** Always use `ListItemButton` with the `selected` prop for navigation menus, and ensure icon-only buttons have both an `aria-label` and a `Tooltip`.
