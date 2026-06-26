@@ -12,7 +12,7 @@
 12. 5. [Module-by-Module Architecture](#module-by-module-architecture)
 13. 6. [Data Flow Architecture](#data-flow-architecture)
 14. 7. [Implementation Plan](#implementation-plan)
-15. 8. [Timeline & Gantt Chart](#timeline--gantt-chart)
+15. 8. [Timeline, Gantt Chart](#timeline--gantt-chart)
 
 ## System Architecture Overview
 
