@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Grid, CalendarPicker, LocalizationProvider, StaticDatePicker } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import axios from 'axios';
 
 export default function Scheduling() {
@@ -28,7 +28,7 @@ export default function Scheduling() {
             <Typography variant="h6" gutterBottom>Available Doctors</Typography>
             <List>
               {doctors.map(d => (
-                <ListItem button key={d.id}>
+                <ListItem key={d.id}>
                   <ListItemText primary={`Dr. ${d.firstName} ${d.lastName}`} secondary={d.specialization} />
                   <Button size="small" variant="contained">Book</Button>
                 </ListItem>
