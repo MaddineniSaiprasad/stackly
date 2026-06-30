@@ -1,5 +1,32 @@
-import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Chip } from '@mui/material';
-import { Dashboard as DashboardIcon, LocalHospital, VideoCall, LocalPharmacy, Science, Security, Event, MonitorHeart, Analytics as AnalyticsIcon, BugReport, Logout, HealthAndSafety } from '@mui/icons-material';
+import {
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Avatar,
+  Chip,
+  Tooltip,
+} from '@mui/material';
+import {
+  Dashboard as DashboardIcon,
+  LocalHospital,
+  VideoCall,
+  LocalPharmacy,
+  Science,
+  Security,
+  Event,
+  MonitorHeart,
+  Analytics as AnalyticsIcon,
+  BugReport,
+  Logout,
+  HealthAndSafety,
+} from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import { RootState } from '../store';
@@ -36,7 +63,13 @@ export default function Dashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+      }}
+    >
       <AppBar
         position="fixed"
         sx={{
@@ -49,7 +82,14 @@ export default function Dashboard() {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36, boxShadow: '0 0 12px rgba(6, 182, 212, 0.5)' }}>
+            <Avatar
+              sx={{
+                bgcolor: 'primary.main',
+                width: 36,
+                height: 36,
+                boxShadow: '0 0 12px rgba(6, 182, 212, 0.5)',
+              }}
+            >
               <HealthAndSafety sx={{ color: 'background.default' }} />
             </Avatar>
             <Typography
@@ -70,27 +110,37 @@ export default function Dashboard() {
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Chip
-              avatar={<Avatar sx={{ bgcolor: 'secondary.main' }}>{user?.email?.[0].toUpperCase()}</Avatar>}
+              avatar={
+                <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                  {user?.email?.[0].toUpperCase()}
+                </Avatar>
+              }
               label={user?.email}
               variant="outlined"
-              sx={{ borderColor: 'rgba(255, 255, 255, 0.12)', bgcolor: 'rgba(255, 255, 255, 0.03)' }}
-            />
-            <IconButton
-              color="inherit"
-              onClick={() => dispatch(logout())}
               sx={{
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: 2.5,
-                transition: 'all 0.2s',
-                '&:hover': {
-                  bgcolor: 'rgba(239, 68, 68, 0.1)',
-                  color: '#ef4444',
-                  borderColor: 'rgba(239, 68, 68, 0.2)',
-                },
+                borderColor: 'rgba(255, 255, 255, 0.12)',
+                bgcolor: 'rgba(255, 255, 255, 0.03)',
               }}
-            >
-              <Logout fontSize="small" />
-            </IconButton>
+            />
+            <Tooltip title="Logout" arrow>
+              <IconButton
+                color="inherit"
+                onClick={() => dispatch(logout())}
+                aria-label="Logout"
+                sx={{
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: 2.5,
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    bgcolor: 'rgba(239, 68, 68, 0.1)',
+                    color: '#ef4444',
+                    borderColor: 'rgba(239, 68, 68, 0.2)',
+                  },
+                }}
+              >
+                <Logout fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </AppBar>
@@ -112,7 +162,9 @@ export default function Dashboard() {
         <Box sx={{ overflow: 'auto', p: 2 }}>
           <List sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
             {menuItems.map((item) => {
-              const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+              const isActive =
+                location.pathname === item.path ||
+                (item.path !== '/' && location.pathname.startsWith(item.path));
               return (
                 <ListItemButton
                   key={item.text}
@@ -123,12 +175,18 @@ export default function Dashboard() {
                     px: 2,
                     transition: 'all 0.2s ease-in-out',
                     position: 'relative',
-                    bgcolor: isActive ? 'rgba(6, 182, 212, 0.08)' : 'transparent',
+                    bgcolor: isActive
+                      ? 'rgba(6, 182, 212, 0.08)'
+                      : 'transparent',
                     color: isActive ? 'primary.main' : 'text.secondary',
                     border: '1px solid',
-                    borderColor: isActive ? 'rgba(6, 182, 212, 0.15)' : 'transparent',
+                    borderColor: isActive
+                      ? 'rgba(6, 182, 212, 0.15)'
+                      : 'transparent',
                     '&:hover': {
-                      bgcolor: isActive ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255, 255, 255, 0.03)',
+                      bgcolor: isActive
+                        ? 'rgba(6, 182, 212, 0.12)'
+                        : 'rgba(255, 255, 255, 0.03)',
                       color: isActive ? 'primary.main' : 'text.primary',
                     },
                   }}
@@ -191,8 +249,12 @@ export default function Dashboard() {
                   <Typography variant="h4" sx={{ fontWeight: 800, mb: 1 }}>
                     Welcome back,
                   </Typography>
-                  <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>
-                    Access AI insights, real-time vitals, and virtual consultations in one high-security portal.
+                  <Typography
+                    variant="body1"
+                    sx={{ color: 'text.secondary', mb: 4 }}
+                  >
+                    Access AI insights, real-time vitals, and virtual
+                    consultations in one high-security portal.
                   </Typography>
                   {/* Grid or summary dashboard cards if needed, otherwise user can navigate */}
                   <MockDashboard />
