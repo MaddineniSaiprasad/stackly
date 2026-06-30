@@ -1,6 +1,24 @@
-import { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography, Paper, Grid, TextField, Card, Avatar, IconButton } from '@mui/material';
-import { VideoCall, Mic, MicOff, Videocam, VideocamOff, CallEnd, LiveTv } from '@mui/icons-material';
+import { useState, useRef } from 'react';
+import {
+  Box,
+  Button,
+  Typography,
+  Grid,
+  TextField,
+  Card,
+  Avatar,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import {
+  VideoCall,
+  Mic,
+  MicOff,
+  Videocam,
+  VideocamOff,
+  CallEnd,
+  LiveTv,
+} from '@mui/icons-material';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
 
@@ -17,33 +35,43 @@ export default function Telemedicine() {
 
   const joinRoom = () => {
     setJoined(true);
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-      if (myVideo.current) myVideo.current.srcObject = stream;
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (myVideo.current) myVideo.current.srcObject = stream;
 
-      socket.emit('join-room', roomId);
+        socket.emit('join-room', roomId);
 
-      socket.on('user-connected', (userId) => {
-        const peer = new Peer({ initiator: true, trickle: false, stream });
-        peer.on('signal', (data) => socket.emit('offer', { offer: data, roomId }));
-        peer.on('stream', (userStream) => {
-          if (userVideo.current) userVideo.current.srcObject = userStream;
+        socket.on('user-connected', () => {
+          const peer = new Peer({ initiator: true, trickle: false, stream });
+          peer.on('signal', (data) =>
+            socket.emit('offer', { offer: data, roomId })
+          );
+          peer.on('stream', (userStream) => {
+            if (userVideo.current) userVideo.current.srcObject = userStream;
+          });
+          socket.on('answer', ({ answer }) => peer.signal(answer));
+          connectionRef.current = peer;
         });
-        socket.on('answer', ({ answer }) => peer.signal(answer));
-        connectionRef.current = peer;
-      });
 
-      socket.on('offer', ({ offer }) => {
-        const peer = new Peer({ initiator: false, trickle: false, stream });
-        peer.on('signal', (data) => socket.emit('answer', { answer: data, roomId }));
-        peer.on('stream', (userStream) => {
-          if (userVideo.current) userVideo.current.srcObject = userStream;
+        socket.on('offer', ({ offer }) => {
+          const peer = new Peer({ initiator: false, trickle: false, stream });
+          peer.on('signal', (data) =>
+            socket.emit('answer', { answer: data, roomId })
+          );
+          peer.on('stream', (userStream) => {
+            if (userVideo.current) userVideo.current.srcObject = userStream;
+          });
+          peer.signal(offer);
+          connectionRef.current = peer;
         });
-        peer.signal(offer);
-        connectionRef.current = peer;
+      })
+      .catch((err) => {
+        console.warn(
+          'Media devices not fully accessible in this environment. Showing placeholder frames.',
+          err
+        );
       });
-    }).catch(err => {
-      console.warn('Media devices not fully accessible in this environment. Showing placeholder frames.', err);
-    });
   };
 
   return (
@@ -51,8 +79,12 @@ export default function Telemedicine() {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
         <VideoCall color="primary" sx={{ fontSize: 32 }} />
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>Telemedicine Consultation</Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>High-fidelity, end-to-end encrypted WebRTC audio/video consults</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 800 }}>
+            Telemedicine Consultation
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            High-fidelity, end-to-end encrypted WebRTC audio/video consults
+          </Typography>
         </Box>
       </Box>
 
@@ -67,11 +99,18 @@ export default function Telemedicine() {
             borderColor: 'rgba(255, 255, 255, 0.08)',
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 700, mb: 1, textAlign: 'center' }}
+          >
             Join Virtual Clinic Room
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3.5, textAlign: 'center' }}>
-            Enter your secure clinical room ID below to establish the peer-to-peer connection.
+          <Typography
+            variant="body2"
+            sx={{ color: 'text.secondary', mb: 3.5, textAlign: 'center' }}
+          >
+            Enter your secure clinical room ID below to establish the
+            peer-to-peer connection.
           </Typography>
           <TextField
             fullWidth
@@ -129,8 +168,21 @@ export default function Telemedicine() {
                     gap: 1,
                   }}
                 >
-                  <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#ef4444', animation: 'pulse 1.5s infinite' }} />
-                  <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: '0.05em' }}>MY CAMERA (PATIENT)</Typography>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      bgcolor: '#ef4444',
+                      animation: 'pulse 1.5s infinite',
+                    }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ fontWeight: 700, letterSpacing: '0.05em' }}
+                  >
+                    MY CAMERA (PATIENT)
+                  </Typography>
                 </Box>
 
                 <video
@@ -138,13 +190,42 @@ export default function Telemedicine() {
                   muted
                   ref={myVideo}
                   autoPlay
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transform: 'scaleX(-1)',
+                  }}
                 />
 
                 {!camActive && (
-                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(17, 24, 39, 0.95)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1.5 }}>
-                    <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)', width: 64, height: 64 }}><VideocamOff /></Avatar>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>Camera is turned off</Typography>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      bgcolor: 'rgba(17, 24, 39, 0.95)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1.5,
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        bgcolor: 'rgba(255, 255, 255, 0.05)',
+                        width: 64,
+                        height: 64,
+                      }}
+                    >
+                      <VideocamOff />
+                    </Avatar>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      Camera is turned off
+                    </Typography>
                   </Box>
                 )}
               </Card>
@@ -181,8 +262,25 @@ export default function Telemedicine() {
                     gap: 1,
                   }}
                 >
-                  <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10b981', animation: 'pulse 1.5s infinite' }} />
-                  <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: '0.05em', color: '#10b981' }}>DOCTOR (LIVE)</Typography>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      bgcolor: '#10b981',
+                      animation: 'pulse 1.5s infinite',
+                    }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontWeight: 700,
+                      letterSpacing: '0.05em',
+                      color: '#10b981',
+                    }}
+                  >
+                    DOCTOR (LIVE)
+                  </Typography>
                 </Box>
 
                 <video
@@ -206,11 +304,25 @@ export default function Telemedicine() {
                     zIndex: 1,
                   }}
                 >
-                  <Avatar sx={{ bgcolor: 'primary.main', width: 64, height: 64, boxShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: 'primary.main',
+                      width: 64,
+                      height: 64,
+                      boxShadow: '0 0 20px rgba(6, 182, 212, 0.3)',
+                    }}
+                  >
                     <LiveTv />
                   </Avatar>
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>Waiting for provider to connect...</Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>Share Room ID: "{roomId}" with your provider</Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                    Waiting for provider to connect...
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    Share Room ID: "{roomId}" with your provider
+                  </Typography>
                 </Box>
               </Card>
             </Grid>
@@ -233,35 +345,74 @@ export default function Telemedicine() {
                   mt: 1,
                 }}
               >
-                <IconButton
-                  onClick={() => setMicActive(!micActive)}
-                  sx={{
-                    bgcolor: micActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: micActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
+                <Tooltip
+                  title={micActive ? 'Mute microphone' : 'Unmute microphone'}
+                  arrow
                 >
-                  {micActive ? <Mic /> : <MicOff />}
-                </IconButton>
+                  <IconButton
+                    onClick={() => setMicActive(!micActive)}
+                    aria-label={
+                      micActive ? 'Mute microphone' : 'Unmute microphone'
+                    }
+                    sx={{
+                      bgcolor: micActive
+                        ? 'rgba(255, 255, 255, 0.05)'
+                        : 'rgba(239, 68, 68, 0.15)',
+                      color: micActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: micActive
+                        ? 'rgba(255, 255, 255, 0.1)'
+                        : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': {
+                        bgcolor: micActive
+                          ? 'rgba(255, 255, 255, 0.1)'
+                          : 'rgba(239, 68, 68, 0.25)',
+                      },
+                    }}
+                  >
+                    {micActive ? <Mic /> : <MicOff />}
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton
-                  onClick={() => setCamActive(!camActive)}
-                  sx={{
-                    bgcolor: camActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: camActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
+                <Tooltip
+                  title={camActive ? 'Turn off camera' : 'Turn on camera'}
+                  arrow
                 >
-                  {camActive ? <Videocam /> : <VideocamOff />}
-                </IconButton>
+                  <IconButton
+                    onClick={() => setCamActive(!camActive)}
+                    aria-label={
+                      camActive ? 'Turn off camera' : 'Turn on camera'
+                    }
+                    sx={{
+                      bgcolor: camActive
+                        ? 'rgba(255, 255, 255, 0.05)'
+                        : 'rgba(239, 68, 68, 0.15)',
+                      color: camActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: camActive
+                        ? 'rgba(255, 255, 255, 0.1)'
+                        : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': {
+                        bgcolor: camActive
+                          ? 'rgba(255, 255, 255, 0.1)'
+                          : 'rgba(239, 68, 68, 0.25)',
+                      },
+                    }}
+                  >
+                    {camActive ? <Videocam /> : <VideocamOff />}
+                  </IconButton>
+                </Tooltip>
 
-                <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(255, 255, 255, 0.1)', mx: 1 }} />
+                <Box
+                  sx={{
+                    width: '1px',
+                    height: 28,
+                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                    mx: 1,
+                  }}
+                />
 
                 <Button
                   variant="contained"
