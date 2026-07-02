@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, TextField, Typography, Container, Paper, Tabs, Tab, Avatar } from '@mui/material';
+import { Box, Button, TextField, Typography, Container, Paper, Tabs, Tab, Avatar, CircularProgress } from '@mui/material';
 import { HealthAndSafety } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { setCredentials } from '../store/slices/authSlice';
 
 export default function Login() {
   const [tab, setTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -15,14 +16,17 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     const endpoint = tab === 0 ? '/api/auth/login' : '/api/auth/register';
     const data = tab === 0 ? { email, password } : { email, password, firstName, lastName, role: 'PATIENT' };
 
     try {
       const response = await axios.post(`http://localhost:5000${endpoint}`, data);
       dispatch(setCredentials(response.data));
-    } catch (error) {
+    } catch {
       alert('Authentication failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -161,6 +165,8 @@ export default function Login() {
                 variant="contained"
                 type="submit"
                 size="large"
+                disabled={isLoading}
+                aria-label={isLoading ? 'Authenticating' : (tab === 0 ? 'Sign In to Portal' : 'Register Account')}
                 sx={{
                   mt: 1.5,
                   py: 1.5,
@@ -169,8 +175,9 @@ export default function Login() {
                   borderRadius: 3,
                   boxShadow: '0 4px 20px rgba(6, 182, 212, 0.25)',
                 }}
+                startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
               >
-                {tab === 0 ? 'Sign In to Portal' : 'Register Account'}
+                {isLoading ? 'Authenticating...' : (tab === 0 ? 'Sign In to Portal' : 'Register Account')}
               </Button>
             </Box>
           </form>
