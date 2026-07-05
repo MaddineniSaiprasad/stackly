@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography, Paper, Grid, TextField, Card, Avatar, IconButton } from '@mui/material';
+import { useState, useRef } from 'react';
+import { Box, Button, Typography, Grid, TextField, Card, Avatar, IconButton, Tooltip, CircularProgress } from '@mui/material';
 import { VideoCall, Mic, MicOff, Videocam, VideocamOff, CallEnd, LiveTv } from '@mui/icons-material';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
@@ -9,20 +9,27 @@ const socket = io('http://localhost:5000');
 export default function Telemedicine() {
   const [roomId, setRoomId] = useState('demo-room');
   const [joined, setJoined] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [micActive, setMicActive] = useState(true);
   const [camActive, setCamActive] = useState(true);
   const myVideo = useRef<HTMLVideoElement>(null);
   const userVideo = useRef<HTMLVideoElement>(null);
   const connectionRef = useRef<Peer.Instance>();
 
-  const joinRoom = () => {
-    setJoined(true);
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+  const joinRoom = async () => {
+    setLoading(true);
+    try {
+      const [stream] = await Promise.all([
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }),
+        new Promise(resolve => setTimeout(resolve, 1000)) // Minimum delay for UX feedback
+      ]);
+
+      setJoined(true);
       if (myVideo.current) myVideo.current.srcObject = stream;
 
       socket.emit('join-room', roomId);
 
-      socket.on('user-connected', (userId) => {
+      socket.on('user-connected', () => {
         const peer = new Peer({ initiator: true, trickle: false, stream });
         peer.on('signal', (data) => socket.emit('offer', { offer: data, roomId }));
         peer.on('stream', (userStream) => {
@@ -41,9 +48,13 @@ export default function Telemedicine() {
         peer.signal(offer);
         connectionRef.current = peer;
       });
-    }).catch(err => {
+    } catch (err) {
       console.warn('Media devices not fully accessible in this environment. Showing placeholder frames.', err);
-    });
+      // Even if media fails, we join the room (e.g. for audio only or just to see others)
+      setJoined(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,13 +97,15 @@ export default function Telemedicine() {
             variant="contained"
             size="large"
             onClick={joinRoom}
+            disabled={loading}
+            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
             sx={{
               py: 1.5,
               fontWeight: 700,
               boxShadow: '0 4px 15px rgba(6, 182, 212, 0.25)',
             }}
           >
-            Start Virtual Session
+            {loading ? 'Initializing...' : 'Start Virtual Session'}
           </Button>
         </Card>
       ) : (
@@ -233,33 +246,39 @@ export default function Telemedicine() {
                   mt: 1,
                 }}
               >
-                <IconButton
-                  onClick={() => setMicActive(!micActive)}
-                  sx={{
-                    bgcolor: micActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: micActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
-                >
-                  {micActive ? <Mic /> : <MicOff />}
-                </IconButton>
+                <Tooltip title={micActive ? "Mute microphone" : "Unmute microphone"}>
+                  <IconButton
+                    aria-label={micActive ? "Mute microphone" : "Unmute microphone"}
+                    onClick={() => setMicActive(!micActive)}
+                    sx={{
+                      bgcolor: micActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
+                      color: micActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': { bgcolor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
+                    }}
+                  >
+                    {micActive ? <Mic /> : <MicOff />}
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton
-                  onClick={() => setCamActive(!camActive)}
-                  sx={{
-                    bgcolor: camActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: camActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
-                >
-                  {camActive ? <Videocam /> : <VideocamOff />}
-                </IconButton>
+                <Tooltip title={camActive ? "Turn off camera" : "Turn on camera"}>
+                  <IconButton
+                    aria-label={camActive ? "Turn off camera" : "Turn on camera"}
+                    onClick={() => setCamActive(!camActive)}
+                    sx={{
+                      bgcolor: camActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
+                      color: camActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': { bgcolor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
+                    }}
+                  >
+                    {camActive ? <Videocam /> : <VideocamOff />}
+                  </IconButton>
+                </Tooltip>
 
                 <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(255, 255, 255, 0.1)', mx: 1 }} />
 
@@ -267,7 +286,11 @@ export default function Telemedicine() {
                   variant="contained"
                   color="error"
                   startIcon={<CallEnd />}
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to end this clinical session?")) {
+                      window.location.reload();
+                    }
+                  }}
                   sx={{
                     px: 4,
                     py: 1.5,
