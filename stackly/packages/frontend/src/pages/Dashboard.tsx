@@ -1,4 +1,4 @@
-import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Chip } from '@mui/material';
+import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Chip, Tooltip } from '@mui/material';
 import { Dashboard as DashboardIcon, LocalHospital, VideoCall, LocalPharmacy, Science, Security, Event, MonitorHeart, Analytics as AnalyticsIcon, BugReport, Logout, HealthAndSafety } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
@@ -75,22 +75,25 @@ export default function Dashboard() {
               variant="outlined"
               sx={{ borderColor: 'rgba(255, 255, 255, 0.12)', bgcolor: 'rgba(255, 255, 255, 0.03)' }}
             />
-            <IconButton
-              color="inherit"
-              onClick={() => dispatch(logout())}
-              sx={{
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: 2.5,
-                transition: 'all 0.2s',
-                '&:hover': {
-                  bgcolor: 'rgba(239, 68, 68, 0.1)',
-                  color: '#ef4444',
-                  borderColor: 'rgba(239, 68, 68, 0.2)',
-                },
-              }}
-            >
-              <Logout fontSize="small" />
-            </IconButton>
+            <Tooltip title="Logout">
+              <IconButton
+                color="inherit"
+                onClick={() => dispatch(logout())}
+                aria-label="Logout"
+                sx={{
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: 2.5,
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    bgcolor: 'rgba(239, 68, 68, 0.1)',
+                    color: '#ef4444',
+                    borderColor: 'rgba(239, 68, 68, 0.2)',
+                  },
+                }}
+              >
+                <Logout fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </AppBar>
