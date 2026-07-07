@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography, Paper, Grid, TextField, Card, Avatar, IconButton } from '@mui/material';
+import { Box, Button, Typography, Paper, Grid, TextField, Card, Avatar, IconButton, Tooltip } from '@mui/material';
 import { VideoCall, Mic, MicOff, Videocam, VideocamOff, CallEnd, LiveTv } from '@mui/icons-material';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
@@ -233,33 +233,39 @@ export default function Telemedicine() {
                   mt: 1,
                 }}
               >
-                <IconButton
-                  onClick={() => setMicActive(!micActive)}
-                  sx={{
-                    bgcolor: micActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: micActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
-                >
-                  {micActive ? <Mic /> : <MicOff />}
-                </IconButton>
+                <Tooltip title={micActive ? 'Mute microphone' : 'Unmute microphone'}>
+                  <IconButton
+                    onClick={() => setMicActive(!micActive)}
+                    aria-label={micActive ? 'Mute microphone' : 'Unmute microphone'}
+                    sx={{
+                      bgcolor: micActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
+                      color: micActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': { bgcolor: micActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
+                    }}
+                  >
+                    {micActive ? <Mic /> : <MicOff />}
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton
-                  onClick={() => setCamActive(!camActive)}
-                  sx={{
-                    bgcolor: camActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
-                    color: camActive ? '#fff' : '#ef4444',
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
-                    '&:hover': { bgcolor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
-                  }}
-                >
-                  {camActive ? <Videocam /> : <VideocamOff />}
-                </IconButton>
+                <Tooltip title={camActive ? 'Turn off camera' : 'Turn on camera'}>
+                  <IconButton
+                    onClick={() => setCamActive(!camActive)}
+                    aria-label={camActive ? 'Turn off camera' : 'Turn on camera'}
+                    sx={{
+                      bgcolor: camActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.15)',
+                      color: camActive ? '#fff' : '#ef4444',
+                      p: 1.5,
+                      border: '1px solid',
+                      borderColor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.2)',
+                      '&:hover': { bgcolor: camActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.25)' },
+                    }}
+                  >
+                    {camActive ? <Videocam /> : <VideocamOff />}
+                  </IconButton>
+                </Tooltip>
 
                 <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(255, 255, 255, 0.1)', mx: 1 }} />
 
@@ -267,7 +273,11 @@ export default function Telemedicine() {
                   variant="contained"
                   color="error"
                   startIcon={<CallEnd />}
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to end this clinical session?')) {
+                      window.location.reload();
+                    }
+                  }}
                   sx={{
                     px: 4,
                     py: 1.5,

@@ -1,0 +1,3 @@
+## 2025-05-15 - Accessible Media Controls & Session Safety
+**Learning:** Icon-only buttons in critical communication interfaces (like Telemedicine) require both visual tooltips for sighted users and ARIA labels for screen readers to be truly accessible. Dynamic labels that reflect state changes (e.g., 'Mute' vs 'Unmute') provide immediate and clear feedback. Minimal diffs are crucial for clear code reviews and avoiding regression risks in large files.
+**Action:** Always wrap icon-only buttons in Tooltips and provide dynamic aria-labels that update with the component state. Avoid global formatting when applying functional changes.
